@@ -6,6 +6,7 @@ on:
     paths:
       - 'logs/**'
       - 'minutes/**'
+      - 'ideas/**'
       - 'docs/**'
       - 'scripts/build_index.py'
   workflow_dispatch:

@@ -1,7 +1,7 @@
 # MTE Capstone Development Log
 
-A static website for our capstone dev logs, meeting minutes and project
-documents. There is no database and no login — every entry is a Markdown file
+A static website for our capstone meeting minutes, project ideas, dev logs
+and project documents. There is no database and no login — every entry is a Markdown file
 in this repository, and the site rebuilds itself whenever someone pushes.
 
 **Live site:** `https://<username>.github.io/<repo>/`
@@ -12,7 +12,10 @@ in this repository, and the site rebuilds itself whenever someone pushes.
 
 You can do all of this from github.com in a browser.
 
-1. Open the **`logs/`** folder (or **`minutes/`** for meeting minutes).
+1. Open the folder for the kind of entry:
+   - **`minutes/`** — meeting minutes
+   - **`ideas/`** — candidate project ideas, while the project is being chosen
+   - **`logs/`** — development logs, once work is underway
 2. Click **Add file → Create new file**.
 3. Name it `YYYY-MM-DD-short-title.md` — for example
    `2026-10-03-encoder-mount-redesign.md`. The date in the filename is what
@@ -40,9 +43,29 @@ attachments:
 What you did, what you found, and what it means for the project.
 ```
 
-Copies of both templates live at [`logs/_TEMPLATE.md`](logs/_TEMPLATE.md) and
-[`minutes/_TEMPLATE.md`](minutes/_TEMPLATE.md). Files starting with `_` are
+Templates for each kind live at [`minutes/_TEMPLATE.md`](minutes/_TEMPLATE.md),
+[`ideas/_TEMPLATE.md`](ideas/_TEMPLATE.md) and [`logs/_TEMPLATE.md`](logs/_TEMPLATE.md). Files starting with `_` are
 ignored by the site, so the templates never show up as entries.
+
+## Project ideas
+
+Each idea gets its own file in `ideas/`. Set `status:` to one of:
+
+| Status | Meaning |
+| --- | --- |
+| `considering` | On the table (the default) |
+| `shortlisted` | Still in the running after a first cut |
+| `selected` | The project we are doing |
+| `rejected` | Dropped. Keep the file and note why under *Decision notes* — the record of what was ruled out, and why, is useful when writing the proposal. |
+
+The **Project Ideas** tab groups ideas by status. Once a project is chosen, update
+`project` and `status` in the `site-config` block of `index.html`.
+
+## Drafts
+
+Add `draft: true` to an entry's front matter to keep it off the site while it is
+being written. Delete that line when it's ready. [`minutes/group-formation.md`](minutes/group-formation.md)
+starts out as a draft.
 
 ## Attaching a PDF or image
 
@@ -74,15 +97,17 @@ Everything between the `---` lines at the top of a file.
 
 | Field | Applies to | Notes |
 | --- | --- | --- |
-| `title` | both | Falls back to the first `#` heading, then the filename. |
-| `date` | both | `YYYY-MM-DD`. Falls back to the date in the filename. |
-| `author` | dev logs | One name or a list: `[Ann, Ben]`. |
+| `title` | all | Falls back to the first `#` heading, then the filename. |
+| `date` | all | `YYYY-MM-DD`. Falls back to the date in the filename. |
+| `author` | logs, ideas | One name or a list: `[Ann, Ben]`. Shown as "Proposed by" on ideas. |
 | `attendees` | minutes | Who was at the meeting. |
-| `tags` | both | Becomes the filter buttons on the site. |
-| `attachments` | both | Paths relative to the repo root. |
-| `summary` | both | One-line blurb for the list view. Auto-generated if omitted. |
-| `type` | both | Only needed to override the folder (`log` or `minutes`). |
-| `updated` | both | Only needed to override the git history date. |
+| `status` | ideas | `considering`, `shortlisted`, `selected` or `rejected`. |
+| `draft` | all | `true` keeps the entry off the site. |
+| `tags` | all | Becomes the filter buttons on the site. |
+| `attachments` | all | Paths relative to the repo root. |
+| `summary` | all | One-line blurb for the list view. Auto-generated if omitted. |
+| `type` | all | Only needed to override the folder (`log`, `minutes` or `idea`). |
+| `updated` | all | Only needed to override the git history date. |
 
 Every field is optional. A file with no front matter at all still works.
 
@@ -101,8 +126,8 @@ Every field is optional. A file with no front matter at all still works.
 
 ## How it works
 
-- [`scripts/build_index.py`](scripts/build_index.py) scans `logs/`, `minutes/`
-  and `docs/`, reads the front matter, and writes `content/index.json`.
+- [`scripts/build_index.py`](scripts/build_index.py) scans `minutes/`, `ideas/`,
+  `logs/` and `docs/`, reads the front matter, and writes `content/index.json`.
 - [`.github/workflows/build-index.yml`](.github/workflows/build-index.yml) runs
   that script on every push and commits the result back.
 - `index.html` is a single page that fetches `content/index.json` and renders

@@ -12,7 +12,8 @@ import subprocess
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECTIONS = [("logs", "log"), ("minutes", "minutes")]
+SECTIONS = [("logs", "log"), ("minutes", "minutes"), ("ideas", "idea")]
+IDEA_STATUSES = ("selected", "shortlisted", "considering", "rejected")
 DOCS_DIR = "docs"
 OUT = os.path.join(ROOT, "content", "index.json")
 
@@ -56,6 +57,11 @@ def unquote(value):
     if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
         return value[1:-1]
     return value
+
+
+def idea_status(value):
+    value = str(value or "").strip().lower()
+    return value if value in IDEA_STATUSES else "considering"
 
 
 def as_list(value):
@@ -117,6 +123,8 @@ def collect_entries():
             with open(os.path.join(directory, name), encoding="utf-8") as fh:
                 raw = fh.read()
             meta, body = parse_front_matter(raw)
+            if str(meta.get("draft", "")).strip().lower() in ("true", "yes"):
+                continue  # still being written; kept off the site until draft is removed
 
             in_name = DATE_IN_NAME.match(name)
             created, changed = git_dates(rel)
@@ -158,6 +166,7 @@ def collect_entries():
                 "authors": as_list(meta.get("author") or meta.get("authors")),
                 "tags": as_list(meta.get("tags")),
                 "attendees": as_list(meta.get("attendees")),
+                "status": idea_status(meta.get("status")) if kind == "idea" else None,
                 "summary": meta.get("summary") or summarize(body),
                 "source": rel,
                 "attachments": attachments,
@@ -206,6 +215,7 @@ def main():
         "counts": {
             "log": sum(1 for e in entries if e["kind"] == "log"),
             "minutes": sum(1 for e in entries if e["kind"] == "minutes"),
+            "idea": sum(1 for e in entries if e["kind"] == "idea"),
             "documents": len(documents),
         },
         "entries": entries,
@@ -215,8 +225,9 @@ def main():
     with open(OUT, "w", encoding="utf-8") as fh:
         json.dump(payload, fh, indent=1, ensure_ascii=False)
         fh.write("\n")
-    print(f"content/index.json: {payload['counts']['log']} logs, "
-          f"{payload['counts']['minutes']} minutes, {len(documents)} documents")
+    c = payload["counts"]
+    print(f"content/index.json: {c['log']} logs, {c['minutes']} minutes, "
+          f"{c['idea']} ideas, {len(documents)} documents")
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MTE Capstone Development Log</title>
-<meta name="description" content="Development logs, meeting minutes and project documents for our MTE capstone project.">
+<meta name="description" content="Meeting minutes, project ideas, development logs and documents for our MTE capstone project.">
 <link rel="icon" href="assets/uw.png">
 
 <!-- ════════════════════════════════════════════════════════════════════
@@ -13,12 +13,13 @@
      ═════════════════════════════════════════════════════════════════ -->
 <script type="application/json" id="site-config">
 {
-  "project": "Single-Axis Precision Positioning System",
+  "project": "Mechatronics Capstone Project",
+  "status": "Project selection in progress",
   "subtitle": "Capstone Development Log",
   "course": "MTE 481 / 482",
   "term": "Fall 2026 – Winter 2027",
-  "team": ["Hunter Adams", "Teammate Two", "Teammate Three", "Teammate Four"],
-  "repo": ""
+  "team": ["Hunter Adams", "Nathan Ellis", "Khushmeet Kaur", "justin Zhang"],
+  "repo": " TO BE ADDED"
 }
 </script>
 
@@ -154,6 +155,29 @@ main { padding: 8px 0 64px; }
 }
 .badge--log { background: var(--gold); color: #1a1a1c; }
 .badge--minutes { background: var(--red); color: #fff; }
+.badge--idea { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--gold-deep); }
+.status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap;
+}
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.status--selected::before { background: var(--gold-deep); box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 45%, transparent); }
+.status--shortlisted::before { background: var(--gold-deep); }
+.status--rejected { color: var(--muted); font-weight: 500; }
+.status--rejected::before { background: transparent; box-shadow: inset 0 0 0 1.5px var(--muted); }
+.card--rejected h2 { color: var(--muted); }
+.article__head .status { margin: 0 6px 0 4px; vertical-align: 1px; }
+.masthead .project-status {
+  display: inline-flex; align-items: center; gap: 8px; margin: 10px 0 0;
+  font-size: 13px; font-weight: 600; color: var(--ink-2);
+  padding: 4px 11px 4px 9px; border-radius: 999px;
+  background: color-mix(in srgb, var(--gold) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold-deep) 55%, transparent);
+}
+.masthead .project-status[hidden] { display: none; }
+.masthead .project-status::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold-deep);
+}
 .date { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .card__top .clip { margin-left: auto; font-size: 12.5px; color: var(--muted); }
 .card h2 { margin: 0 0 5px; font-size: 18px; line-height: 1.3; letter-spacing: -.01em; }
@@ -279,6 +303,7 @@ footer a { color: var(--muted); }
   <header class="masthead">
     <p class="eyebrow" id="lh-subtitle"></p>
     <h1 id="lh-project"></h1>
+    <p class="project-status" id="lh-status" hidden></p>
     <p class="team" id="lh-team"></p>
   </header>
 </div>
@@ -308,10 +333,24 @@ footer a { color: var(--muted); }
   var CFG = JSON.parse(document.getElementById("site-config").textContent);
   var TABS = [
     { id: "all",       label: "All" },
-    { id: "log",       label: "Dev Logs" },
     { id: "minutes",   label: "Meeting Minutes" },
+    { id: "idea",      label: "Project Ideas" },
+    { id: "log",       label: "Dev Logs" },
     { id: "documents", label: "Documents" }
   ];
+  var KINDS = {
+    log:     { badge: "Dev Log",      long: "Dev Log",         plural: "dev logs",        folder: "logs" },
+    minutes: { badge: "Minutes",      long: "Meeting Minutes", plural: "meeting minutes", folder: "minutes" },
+    idea:    { badge: "Project Idea", long: "Project Idea",    plural: "project ideas",   folder: "ideas" }
+  };
+  var STATUS_ORDER = ["selected", "shortlisted", "considering", "rejected"];
+  var kindOf = function (k) { return KINDS[k] || KINDS.log; };
+  var cap = function (w) { return w.charAt(0).toUpperCase() + w.slice(1); };
+  var statusHTML = function (e) {
+    return e.kind === "idea" && e.status
+      ? '<span class="status status--' + esc(e.status) + '">' + esc(cap(e.status)) + "</span>"
+      : "";
+  };
 
   var data = { entries: [], documents: [], counts: {}, generated: "" };
   var state = { tab: "all", query: "", tag: null, entry: null };
@@ -338,14 +377,15 @@ footer a { color: var(--muted); }
 
   /* ── Header ─────────────────────────────────────────────────────── */
   function renderHead() {
-    document.title = (CFG.project || "Capstone") + " — " + (CFG.subtitle || "Development Log");
+    document.title = (CFG.project || "MTE Capstone") + " — " + (CFG.subtitle || "Development Log");
     el("lh-course").textContent = CFG.course || "";
     el("lh-term").textContent = CFG.term || "";
     el("lh-subtitle").textContent = CFG.subtitle || "Capstone Development Log";
-    el("lh-project").textContent = CFG.project || "Capstone Project";
+    el("lh-project").textContent = CFG.project || "MTE Capstone Project";
+    if (CFG.status) { el("lh-status").textContent = CFG.status; el("lh-status").hidden = false; }
     el("lh-team").textContent = (CFG.team && CFG.team.length) ? CFG.team.join(" · ") : "";
-    if (CFG.repo) {
-      el("repolink").innerHTML = '<a href="' + esc(CFG.repo) + '" target="_blank" rel="noopener">Source repository ↗</a>';
+    if (/^https?:\/\//.test((CFG.repo || "").trim())) {
+      el("repolink").innerHTML = '<a href="' + esc(CFG.repo.trim()) + '" target="_blank" rel="noopener">Source repository ↗</a>';
     }
   }
 
@@ -361,7 +401,7 @@ footer a { color: var(--muted); }
   function visibleEntries() {
     var q = state.query.trim().toLowerCase();
     return data.entries.filter(function (e) {
-      if (state.tab === "log" || state.tab === "minutes") { if (e.kind !== state.tab) return false; }
+      if (KINDS[state.tab] && e.kind !== state.tab) return false;
       if (state.tag && (e.tags || []).indexOf(state.tag) < 0) return false;
       if (!q) return true;
       return [e.title, e.summary, e.body, (e.authors || []).join(" "),
@@ -376,6 +416,7 @@ footer a { color: var(--muted); }
       all: data.entries.length,
       log: data.counts.log || 0,
       minutes: data.counts.minutes || 0,
+      idea: data.counts.idea || 0,
       documents: data.documents.length
     };
     return TABS.map(function (t) {
@@ -406,9 +447,11 @@ footer a { color: var(--muted); }
     else if (e.attendees && e.attendees.length) meta.push(esc(e.attendees.length) + " attendees");
     (e.tags || []).forEach(function (t) { meta.push('<span class="tag">' + esc(t) + "</span>"); });
     var clip = (e.attachments || []).length;
-    return '<a class="card" href="#/entry/' + encodeURIComponent(e.id) + '">' +
+    return '<a class="card' + (e.status === "rejected" ? " card--rejected" : "") +
+        '" href="#/entry/' + encodeURIComponent(e.id) + '">' +
       '<div class="card__top">' +
-        '<span class="badge badge--' + esc(e.kind) + '">' + (e.kind === "minutes" ? "Minutes" : "Dev Log") + "</span>" +
+        '<span class="badge badge--' + esc(e.kind) + '">' + esc(kindOf(e.kind).badge) + "</span>" +
+        statusHTML(e) +
         '<span class="date">' + esc(fmtDate(e.date)) + (e.updated ? " · updated " + esc(fmtDate(e.updated)) : "") + "</span>" +
         (clip ? '<span class="clip">' + clip + " attachment" + (clip > 1 ? "s" : "") + "</span>" : "") +
       "</div>" +
@@ -421,10 +464,16 @@ footer a { color: var(--muted); }
   function listView() {
     var items = visibleEntries();
     if (!items.length) return emptyNote();
-    var html = "", month = null;
+    var html = "", group = null;
+    if (state.tab === "idea") {
+      items = items.slice().sort(function (a, b) {
+        return STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status) ||
+               (a.date < b.date ? 1 : a.date > b.date ? -1 : 0);
+      });
+    }
     items.forEach(function (e) {
-      var m = fmtMonth(e.date);
-      if (m !== month) { month = m; html += '<h2 class="month">' + esc(m) + "</h2>"; }
+      var g = state.tab === "idea" ? cap(e.status || "considering") : fmtMonth(e.date);
+      if (g !== group) { group = g; html += '<h2 class="month">' + esc(g) + "</h2>"; }
       html += cardHTML(e);
     });
     return html;
@@ -456,7 +505,9 @@ footer a { color: var(--muted); }
 
   function entryView(e) {
     var meta = [];
-    if (e.authors && e.authors.length) meta.push("<b>" + esc(e.authors.join(", ")) + "</b>");
+    if (e.authors && e.authors.length) {
+      meta.push((e.kind === "idea" ? "Proposed by " : "") + "<b>" + esc(e.authors.join(", ")) + "</b>");
+    }
     if (e.attendees && e.attendees.length) meta.push("Present: " + esc(e.attendees.join(", ")));
     if (e.tags && e.tags.length) meta.push(e.tags.map(function (t) { return "#" + esc(t); }).join(" "));
 
@@ -466,11 +517,11 @@ footer a { color: var(--muted); }
         e.attachments.map(function (a) { return fileHTML(a, false); }).join("") + "</div>"
       : "";
 
-    return '<a class="back no-print" href="#/' + (e.kind === "minutes" ? "minutes" : "log") + '">← Back to ' +
-        (e.kind === "minutes" ? "meeting minutes" : "dev logs") + "</a>" +
+    return '<a class="back no-print" href="#/' + esc(e.kind) + '">← Back to ' + esc(kindOf(e.kind).plural) + "</a>" +
       "<article>" +
         '<div class="article__head">' +
-          '<span class="badge badge--' + esc(e.kind) + '">' + (e.kind === "minutes" ? "Meeting Minutes" : "Dev Log") + "</span> " +
+          '<span class="badge badge--' + esc(e.kind) + '">' + esc(kindOf(e.kind).long) + "</span> " +
+          statusHTML(e) + " " +
           '<span class="date">' + esc(fmtDate(e.date)) + (e.updated ? " · updated " + esc(fmtDate(e.updated)) : "") + "</span>" +
           "<h1>" + esc(e.title) + "</h1>" +
           (meta.length ? '<p class="byline">' + meta.join(" &nbsp;·&nbsp; ") + "</p>" : "") +
@@ -482,8 +533,12 @@ footer a { color: var(--muted); }
 
   function emptyNote() {
     if (state.query || state.tag) return '<p class="note">Nothing matches that filter.</p>';
-    return '<p class="note">No entries yet. Add a Markdown file to <code>logs/</code> or ' +
-           "<code>minutes/</code> and it shows up here.</p>";
+    if (KINDS[state.tab]) {
+      return '<p class="note">No ' + esc(kindOf(state.tab).plural) + " yet. Add a Markdown file to <code>" +
+             esc(kindOf(state.tab).folder) + "/</code> and it shows up here.</p>";
+    }
+    return '<p class="note">No entries yet. Add a Markdown file to <code>minutes/</code>, ' +
+           "<code>ideas/</code> or <code>logs/</code> and it shows up here.</p>";
   }
 
   /* ── Render ─────────────────────────────────────────────────────── */
