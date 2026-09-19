@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-18T21:36:55Z",
+ "generated": "2026-09-19T15:30:38Z",
  "counts": {
   "log": 2,
   "minutes": 1,
@@ -11,7 +11,7 @@
    "kind": "log",
    "title": "Gearbox trade study",
    "date": "2026-09-18",
-   "updated": null,
+   "updated": "2026-09-19",
    "authors": [
     "Hunter Adams"
    ],
@@ -38,7 +38,7 @@
    "kind": "minutes",
    "title": "Advisor check-in — week 2",
    "date": "2026-09-16",
-   "updated": null,
+   "updated": "2026-09-19",
    "authors": [],
    "tags": [
     "advisor"
@@ -58,7 +58,7 @@
    "kind": "log",
    "title": "Project kickoff and problem definition",
    "date": "2026-09-15",
-   "updated": null,
+   "updated": "2026-09-19",
    "authors": [
     "Hunter Adams"
    ],
@@ -79,7 +79,7 @@
    "name": "gearbox-trade-study-rev-A.pdf",
    "ext": "PDF",
    "size": "762 B",
-   "updated": "2026-09-18",
+   "updated": "2026-09-19",
    "citedBy": [
     {
      "id": "logs/2026-09-18-gearbox-trade-study",
