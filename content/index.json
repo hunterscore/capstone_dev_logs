@@ -1,0 +1,91 @@
+{
+ "generated": "2026-09-18T21:36:55Z",
+ "counts": {
+  "log": 2,
+  "minutes": 1,
+  "documents": 1
+ },
+ "entries": [
+  {
+   "id": "logs/2026-09-18-gearbox-trade-study",
+   "kind": "log",
+   "title": "Gearbox trade study",
+   "date": "2026-09-18",
+   "updated": null,
+   "authors": [
+    "Hunter Adams"
+   ],
+   "tags": [
+    "mechanical",
+    "trade-study",
+    "procurement"
+   ],
+   "attendees": [],
+   "summary": "Compared harmonic drive, planetary and cycloidal options against backlash, cost and lead time. Recommending the planetary with firmware compensation.",
+   "source": "logs/2026-09-18-gearbox-trade-study.md",
+   "attachments": [
+    {
+     "path": "docs/gearbox-trade-study-rev-A.pdf",
+     "name": "gearbox-trade-study-rev-A.pdf",
+     "ext": "PDF",
+     "size": "762 B"
+    }
+   ],
+   "body": "# Gearbox trade study\n\nResolving open question 1 from the kickoff. Full scoring matrix is in the\nattached PDF; the short version is below.\n\n## Findings\n\n- The harmonic drive meets the backlash spec outright (< 1 arcmin) but costs\n  $410 and has a **nine week lead time**. That lead time alone disqualifies it —\n  it lands after our integration milestone.\n- The planetary gearbox has 12 arcmin of backlash, which is ~0.35 mm at our\n  output radius. That is inside the 0.5 mm budget only if we compensate, and it\n  leaves nothing for the rest of the error stack.\n- Firmware backlash compensation is well understood and we have an encoder on\n  the output shaft, so the compensation is measurable rather than open-loop.\n\n## Recommendation\n\nPlanetary gearbox, encoder on the output shaft, backlash compensation in\nfirmware. Revisit if bench testing shows the error stack exceeding 0.4 mm.\n\n> Risk noted: this couples our position accuracy to firmware correctness. If the\n> compensation is wrong we will see it as a mechanical problem and waste time\n> looking in the wrong place. Bench test the compensation in isolation first."
+  },
+  {
+   "id": "minutes/2026-09-16-advisor-checkin",
+   "kind": "minutes",
+   "title": "Advisor check-in — week 2",
+   "date": "2026-09-16",
+   "updated": null,
+   "authors": [],
+   "tags": [
+    "advisor"
+   ],
+   "attendees": [
+    "Hunter Adams",
+    "Prof. advisor",
+    "Team"
+   ],
+   "summary": "Walked through the narrowed scope. Advisor agreed that one axis, validated properly, documents better than three axes that half work — and pushed us to write the acceptance test before the design freeze so we are not…",
+   "source": "minutes/2026-09-16-advisor-checkin.md",
+   "attachments": [],
+   "body": "# Advisor check-in — week 2\n\n**Time.** 14:00–14:35, E7 office hours.\n\n## Discussion\n\nWalked through the narrowed scope. Advisor agreed that one axis, validated\nproperly, documents better than three axes that half work — and pushed us to\nwrite the acceptance test *before* the design freeze so we are not tempted to\nmove the target later.\n\n## Feedback\n\n- Requirements matrix needs a verification column: for each requirement, the\n  specific measurement that confirms it.\n- Start the test fixture design now. It is the thing teams reliably\n  underestimate, and it gates every validation number in the final report.\n\n## Action items\n\n- [ ] Add verification methods to the requirements matrix — Hunter, Sep 19\n- [ ] Sketch the test fixture concept — Sep 23\n- [ ] Book the lab bench for integration week — Sep 23"
+  },
+  {
+   "id": "logs/2026-09-15-project-kickoff",
+   "kind": "log",
+   "title": "Project kickoff and problem definition",
+   "date": "2026-09-15",
+   "updated": null,
+   "authors": [
+    "Hunter Adams"
+   ],
+   "tags": [
+    "planning",
+    "requirements"
+   ],
+   "attendees": [],
+   "summary": "First working session of the term. We scoped the problem statement down from the broad pitch to something a four-person team can actually build and validate by the Symposium deadline.",
+   "source": "logs/2026-09-15-project-kickoff.md",
+   "attachments": [],
+   "body": "# Project kickoff and problem definition\n\nFirst working session of the term. We scoped the problem statement down from\nthe broad pitch to something a four-person team can actually build and validate\nby the Symposium deadline.\n\n## What we decided\n\n- **Scope.** One actuated axis with closed-loop position control, rather than the\n  three-axis system in the original pitch. Three axes is a fabrication problem,\n  not an engineering one, and it would eat the entire budget.\n- **Success criterion.** Steady-state position error under 0.5 mm, settling in\n  under 400 ms against a 2 kg payload.\n- **Budget.** $600 of the $750 allocation, leaving headroom for a second\n  iteration of the parts most likely to fail.\n\n## Open questions\n\n1. Do we need a harmonic drive, or is a planetary gearbox with backlash\n   compensation in firmware good enough? This is the decision that drives cost.\n2. Encoder placement — motor shaft or output shaft. Output shaft is correct but\n   needs a custom mount.\n\n## Next steps\n\n| Task | Owner | Due |\n| --- | --- | --- |\n| Draft requirements matrix | Hunter | Sep 19 |\n| Gearbox trade study | TBD | Sep 22 |\n| Supplier lead times | TBD | Sep 22 |"
+  }
+ ],
+ "documents": [
+  {
+   "path": "docs/gearbox-trade-study-rev-A.pdf",
+   "name": "gearbox-trade-study-rev-A.pdf",
+   "ext": "PDF",
+   "size": "762 B",
+   "updated": "2026-09-18",
+   "citedBy": [
+    {
+     "id": "logs/2026-09-18-gearbox-trade-study",
+     "title": "Gearbox trade study"
+    }
+   ]
+  }
+ ]
+}

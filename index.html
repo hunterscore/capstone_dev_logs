@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MTE Capstone Development Log</title>
+<meta name="description" content="Development logs, meeting minutes and project documents for our MTE capstone project.">
+<link rel="icon" href="assets/uw.png">
+
+<!-- ════════════════════════════════════════════════════════════════════
+     EDIT ME — everything in this block is yours to change.
+     Nothing else in this file needs touching to run the site.
+     ═════════════════════════════════════════════════════════════════ -->
+<script type="application/json" id="site-config">
+{
+  "project": "Single-Axis Precision Positioning System",
+  "subtitle": "Capstone Development Log",
+  "course": "MTE 481 / 482",
+  "term": "Fall 2026 – Winter 2027",
+  "team": ["Hunter Adams", "Teammate Two", "Teammate Three", "Teammate Four"],
+  "repo": ""
+}
+</script>
+
+<style>
+:root {
+  --gold: #FFDC50;
+  --gold-deep: #E0B800;
+  --red: #B01C36;
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f7f7f8;
+  --ink: #1a1a1c;
+  --ink-2: #44444a;
+  --muted: #6e6e76;
+  --rule: #e4e4e8;
+  --rule-strong: #d2d2d8;
+  --shadow: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px -16px rgba(0,0,0,.25);
+  --radius: 10px;
+  --maxw: 880px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #131316;
+    --surface: #1b1b20;
+    --surface-2: #232329;
+    --ink: #ecedf0;
+    --ink-2: #c3c4cc;
+    --muted: #9092a0;
+    --rule: #2d2d35;
+    --rule-strong: #3a3a44;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #131316; --surface: #1b1b20; --surface-2: #232329;
+  --ink: #ecedf0; --ink-2: #c3c4cc; --muted: #9092a0;
+  --rule: #2d2d35; --rule-strong: #3a3a44;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 16px; }
+a { color: inherit; }
+
+/* ── Letterhead ─────────────────────────────────────────────────────── */
+/* The logo is a black wordmark on transparency, so it always sits on a
+   white plaque — including in dark mode, the way real letterhead does. */
+.lh-band { background: #fff; border-bottom: 1px solid rgba(0,0,0,.08); }
+.lh-band__inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 18px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.lh-band img { height: 42px; width: auto; display: block; }
+.lh-meta { text-align: right; font-size: 12px; line-height: 1.45; color: #55555c; }
+.lh-meta strong { display: block; color: #1a1a1c; font-size: 13px; letter-spacing: .02em; }
+.lh-rule { height: 4px; background: var(--gold); }
+
+.masthead { padding: 26px 0 20px; border-bottom: 1px solid var(--rule); }
+.masthead .eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 6px;
+}
+.masthead h1 { margin: 0; font-size: clamp(22px, 4.4vw, 31px); line-height: 1.2; letter-spacing: -.015em; }
+.masthead .team { margin: 10px 0 0; font-size: 13.5px; color: var(--muted); }
+
+/* ── Toolbar ────────────────────────────────────────────────────────── */
+.toolbar {
+  position: sticky; top: 0; z-index: 20;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.toolbar__inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.tab {
+  appearance: none; border: 1px solid transparent; background: transparent;
+  color: var(--ink-2); font: inherit; font-size: 14px; font-weight: 500;
+  padding: 6px 12px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+}
+.tab:hover { background: var(--surface-2); color: var(--ink); }
+.tab[aria-selected="true"] {
+  background: var(--ink); color: var(--paper); border-color: var(--ink);
+}
+.tab .n { opacity: .55; margin-left: 5px; font-variant-numeric: tabular-nums; }
+.search {
+  flex: 1 1 190px; min-width: 150px; margin-left: auto;
+  border: 1px solid var(--rule-strong); background: var(--surface);
+  color: var(--ink); font: inherit; font-size: 14px;
+  padding: 7px 12px; border-radius: 999px;
+}
+.search:focus { outline: 2px solid var(--gold-deep); outline-offset: 1px; border-color: transparent; }
+.search::placeholder { color: var(--muted); }
+
+.tagbar { display: flex; gap: 6px; flex-wrap: wrap; padding: 12px 0 0; }
+.tagbar .lbl { font-size: 12px; color: var(--muted); align-self: center; margin-right: 2px; }
+.chip {
+  appearance: none; font: inherit; font-size: 12px; cursor: pointer;
+  border: 1px solid var(--rule-strong); background: var(--surface); color: var(--ink-2);
+  padding: 3px 10px; border-radius: 999px;
+}
+.chip:hover { border-color: var(--ink-2); color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold-deep); color: #1a1a1c; font-weight: 600; }
+
+/* ── Entry list ─────────────────────────────────────────────────────── */
+main { padding: 8px 0 64px; }
+.month {
+  font-size: 11px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--muted); margin: 26px 0 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+}
+.card {
+  display: block; text-decoration: none; color: inherit;
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px;
+  transition: border-color .12s ease, transform .12s ease, box-shadow .12s ease;
+}
+.card:hover { border-color: var(--rule-strong); box-shadow: var(--shadow); transform: translateY(-1px); }
+.card__top { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; flex-wrap: wrap; }
+.badge {
+  font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+}
+.badge--log { background: var(--gold); color: #1a1a1c; }
+.badge--minutes { background: var(--red); color: #fff; }
+.date { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.card__top .clip { margin-left: auto; font-size: 12.5px; color: var(--muted); }
+.card h2 { margin: 0 0 5px; font-size: 18px; line-height: 1.3; letter-spacing: -.01em; }
+.card p { margin: 0; font-size: 14.5px; color: var(--ink-2); }
+.card__foot { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
+.card__foot .tag { color: var(--muted); }
+.card__foot .tag::before { content: "#"; opacity: .6; }
+
+/* ── Entry detail ───────────────────────────────────────────────────── */
+.back {
+  display: inline-flex; align-items: center; gap: 6px; margin: 18px 0 0;
+  font-size: 14px; color: var(--muted); text-decoration: none;
+}
+.back:hover { color: var(--ink); }
+article { padding: 4px 0 0; }
+.article__head { padding: 14px 0 18px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+.article__head h1 { margin: 10px 0 0; font-size: clamp(23px, 4.6vw, 32px); line-height: 1.22; letter-spacing: -.02em; }
+.byline { margin: 10px 0 0; font-size: 13.5px; color: var(--muted); }
+.byline b { color: var(--ink-2); font-weight: 600; }
+
+.prose {
+  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-size: 17px; line-height: 1.72; color: var(--ink);
+}
+.prose > h1:first-child { display: none; } /* title already in the header */
+.prose h1, .prose h2, .prose h3 {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.3; letter-spacing: -.012em; margin: 1.7em 0 .5em;
+}
+.prose h1 { font-size: 25px; }
+.prose h2 { font-size: 20px; }
+.prose h3 { font-size: 17px; }
+.prose p, .prose ul, .prose ol { margin: 0 0 1.05em; }
+.prose li { margin-bottom: .35em; }
+.prose li::marker { color: var(--muted); }
+.prose a { color: var(--ink); text-decoration-color: var(--gold-deep); text-underline-offset: 2px; }
+.prose a:hover { text-decoration-thickness: 2px; }
+.prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .86em;
+  background: var(--surface-2); border: 1px solid var(--rule); border-radius: 4px; padding: .1em .35em;
+}
+.prose pre {
+  background: var(--surface-2); border: 1px solid var(--rule); border-radius: var(--radius);
+  padding: 14px 16px; overflow-x: auto; font-size: 14px; line-height: 1.55;
+}
+.prose pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+.prose blockquote {
+  margin: 1.2em 0; padding: 2px 0 2px 18px;
+  border-left: 3px solid var(--gold); color: var(--ink-2);
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose table { border-collapse: collapse; width: 100%; margin: 0 0 1.2em; font-size: 15px;
+  font-family: system-ui, -apple-system, sans-serif; display: block; overflow-x: auto; }
+.prose th, .prose td { border: 1px solid var(--rule); padding: 8px 11px; text-align: left; vertical-align: top; }
+.prose th { background: var(--surface-2); font-weight: 600; }
+.prose hr { border: 0; border-top: 1px solid var(--rule); margin: 2em 0; }
+.prose img { max-width: 100%; height: auto; border-radius: 6px; }
+.prose input[type="checkbox"] { margin-right: .45em; accent-color: var(--gold-deep); }
+.prose li:has(> input[type="checkbox"]) { list-style: none; margin-left: -1.3em; }
+
+.attachments { margin: 30px 0 0; padding: 16px 18px; background: var(--surface-2);
+  border: 1px solid var(--rule); border-radius: var(--radius); }
+.attachments h3 {
+  margin: 0 0 11px; font-size: 11px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.file {
+  display: flex; align-items: center; gap: 11px; padding: 9px 11px; text-decoration: none;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; margin-bottom: 7px;
+}
+.file:last-child { margin-bottom: 0; }
+.file:hover { border-color: var(--gold-deep); }
+.file .ext {
+  font-size: 10px; font-weight: 700; letter-spacing: .04em; padding: 4px 7px; border-radius: 4px;
+  background: var(--ink); color: var(--paper); min-width: 42px; text-align: center;
+}
+.file .nm { font-size: 14.5px; font-weight: 500; word-break: break-word; }
+.file .sz { margin-left: auto; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.file .cited { display: block; font-size: 12px; color: var(--muted); font-weight: 400; }
+
+.note { color: var(--muted); font-size: 14.5px; padding: 40px 4px; text-align: center; }
+.note code { font-size: 13px; background: var(--surface-2); padding: .15em .4em; border-radius: 4px; }
+
+footer {
+  border-top: 1px solid var(--rule); padding: 20px 0 40px;
+  font-size: 12.5px; color: var(--muted);
+  display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap;
+}
+footer a { color: var(--muted); }
+
+/* ── Print: an entry prints as a proper letterheaded document ───────── */
+@media print {
+  :root { --paper:#fff; --surface:#fff; --surface-2:#fff; --ink:#000; --ink-2:#222;
+          --muted:#555; --rule:#bbb; --rule-strong:#999; --shadow:none; }
+  .no-print, .toolbar, .tagbar, .back, footer { display: none !important; }
+  body { font-size: 11pt; }
+  .lh-band { border-bottom: 0; }
+  .lh-band__inner, .wrap { max-width: none; padding-left: 0; padding-right: 0; }
+  .lh-rule { height: 3px; -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #000 !important; }
+  .badge { border: 1px solid #000; background: none !important; color: #000 !important; }
+  .prose { font-size: 11pt; }
+  .prose h1, .prose h2, .prose h3 { page-break-after: avoid; }
+  .prose pre, .prose blockquote, .prose table, .file { page-break-inside: avoid; }
+  .attachments { background: none; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; word-break: break-all; }
+}
+</style>
+</head>
+<body>
+
+<div class="lh-band">
+  <div class="lh-band__inner">
+    <img src="assets/uw.png" alt="University of Waterloo">
+    <div class="lh-meta">
+      <strong id="lh-course"></strong>
+      <span id="lh-term"></span>
+    </div>
+  </div>
+</div>
+<div class="lh-rule"></div>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow" id="lh-subtitle"></p>
+    <h1 id="lh-project"></h1>
+    <p class="team" id="lh-team"></p>
+  </header>
+</div>
+
+<nav class="toolbar no-print" id="toolbar" hidden>
+  <div class="toolbar__inner">
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <input class="search" id="search" type="search" placeholder="Search entries…" aria-label="Search entries">
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="tagbar no-print" id="tagbar" hidden></div>
+  <main id="view"><p class="note">Loading…</p></main>
+  <footer>
+    <span id="generated"></span>
+    <span id="repolink"></span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var CFG = JSON.parse(document.getElementById("site-config").textContent);
+  var TABS = [
+    { id: "all",       label: "All" },
+    { id: "log",       label: "Dev Logs" },
+    { id: "minutes",   label: "Meeting Minutes" },
+    { id: "documents", label: "Documents" }
+  ];
+
+  var data = { entries: [], documents: [], counts: {}, generated: "" };
+  var state = { tab: "all", query: "", tag: null, entry: null };
+
+  var el = function (id) { return document.getElementById(id); };
+  var esc = function (s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
+
+  function fmtDate(iso) {
+    var p = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || "");
+    if (!p) return iso || "";
+    var d = new Date(Date.UTC(+p[1], +p[2] - 1, +p[3]));
+    return d.toLocaleDateString("en-CA", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
+  }
+  function fmtMonth(iso) {
+    var p = /^(\d{4})-(\d{2})/.exec(iso || "");
+    if (!p) return "Undated";
+    return new Date(Date.UTC(+p[1], +p[2] - 1, 1))
+      .toLocaleDateString("en-CA", { year: "numeric", month: "long", timeZone: "UTC" });
+  }
+
+  /* ── Header ─────────────────────────────────────────────────────── */
+  function renderHead() {
+    document.title = (CFG.project || "Capstone") + " — " + (CFG.subtitle || "Development Log");
+    el("lh-course").textContent = CFG.course || "";
+    el("lh-term").textContent = CFG.term || "";
+    el("lh-subtitle").textContent = CFG.subtitle || "Capstone Development Log";
+    el("lh-project").textContent = CFG.project || "Capstone Project";
+    el("lh-team").textContent = (CFG.team && CFG.team.length) ? CFG.team.join(" · ") : "";
+    if (CFG.repo) {
+      el("repolink").innerHTML = '<a href="' + esc(CFG.repo) + '" target="_blank" rel="noopener">Source repository ↗</a>';
+    }
+  }
+
+  /* ── Routing ────────────────────────────────────────────────────── */
+  function readHash() {
+    var h = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
+    if (h.indexOf("entry/") === 0) { state.entry = h.slice(6); return; }
+    state.entry = null;
+    state.tab = TABS.some(function (t) { return t.id === h; }) ? h : "all";
+  }
+
+  /* ── Filtering ──────────────────────────────────────────────────── */
+  function visibleEntries() {
+    var q = state.query.trim().toLowerCase();
+    return data.entries.filter(function (e) {
+      if (state.tab === "log" || state.tab === "minutes") { if (e.kind !== state.tab) return false; }
+      if (state.tag && (e.tags || []).indexOf(state.tag) < 0) return false;
+      if (!q) return true;
+      return [e.title, e.summary, e.body, (e.authors || []).join(" "),
+              (e.tags || []).join(" "), (e.attendees || []).join(" ")]
+        .join(" ").toLowerCase().indexOf(q) >= 0;
+    });
+  }
+
+  /* ── Views ──────────────────────────────────────────────────────── */
+  function tabsHTML() {
+    var counts = {
+      all: data.entries.length,
+      log: data.counts.log || 0,
+      minutes: data.counts.minutes || 0,
+      documents: data.documents.length
+    };
+    return TABS.map(function (t) {
+      var on = !state.entry && state.tab === t.id;
+      return '<button class="tab" role="tab" aria-selected="' + on + '" data-tab="' + t.id + '">' +
+             esc(t.label) + '<span class="n">' + counts[t.id] + "</span></button>";
+    }).join("");
+  }
+
+  function tagbarHTML() {
+    if (state.tab === "documents" || state.entry) return "";
+    var seen = {};
+    data.entries.forEach(function (e) {
+      if (state.tab !== "all" && e.kind !== state.tab) return;
+      (e.tags || []).forEach(function (t) { seen[t] = (seen[t] || 0) + 1; });
+    });
+    var tags = Object.keys(seen).sort();
+    if (!tags.length) return "";
+    return '<span class="lbl">Filter:</span>' + tags.map(function (t) {
+      return '<button class="chip" data-tag="' + esc(t) + '" aria-pressed="' +
+             (state.tag === t) + '">' + esc(t) + "</button>";
+    }).join("");
+  }
+
+  function cardHTML(e) {
+    var meta = [];
+    if (e.authors && e.authors.length) meta.push(esc(e.authors.join(", ")));
+    else if (e.attendees && e.attendees.length) meta.push(esc(e.attendees.length) + " attendees");
+    (e.tags || []).forEach(function (t) { meta.push('<span class="tag">' + esc(t) + "</span>"); });
+    var clip = (e.attachments || []).length;
+    return '<a class="card" href="#/entry/' + encodeURIComponent(e.id) + '">' +
+      '<div class="card__top">' +
+        '<span class="badge badge--' + esc(e.kind) + '">' + (e.kind === "minutes" ? "Minutes" : "Dev Log") + "</span>" +
+        '<span class="date">' + esc(fmtDate(e.date)) + (e.updated ? " · updated " + esc(fmtDate(e.updated)) : "") + "</span>" +
+        (clip ? '<span class="clip">' + clip + " attachment" + (clip > 1 ? "s" : "") + "</span>" : "") +
+      "</div>" +
+      "<h2>" + esc(e.title) + "</h2>" +
+      (e.summary ? "<p>" + esc(e.summary) + "</p>" : "") +
+      (meta.length ? '<div class="card__foot">' + meta.join(" &nbsp;·&nbsp; ") + "</div>" : "") +
+    "</a>";
+  }
+
+  function listView() {
+    var items = visibleEntries();
+    if (!items.length) return emptyNote();
+    var html = "", month = null;
+    items.forEach(function (e) {
+      var m = fmtMonth(e.date);
+      if (m !== month) { month = m; html += '<h2 class="month">' + esc(m) + "</h2>"; }
+      html += cardHTML(e);
+    });
+    return html;
+  }
+
+  function fileHTML(d, showCited) {
+    var cited = showCited && d.citedBy && d.citedBy.length
+      ? '<span class="cited">Cited in ' + d.citedBy.map(function (c) { return esc(c.title); }).join(", ") + "</span>"
+      : "";
+    return '<a class="file" href="' + esc(d.path) + '" target="_blank" rel="noopener">' +
+      '<span class="ext">' + esc(d.ext || "FILE") + "</span>" +
+      '<span class="nm">' + esc(d.name) + cited + "</span>" +
+      '<span class="sz">' + esc(d.size || "") + "</span></a>";
+  }
+
+  function documentsView() {
+    var q = state.query.trim().toLowerCase();
+    var docs = data.documents.filter(function (d) {
+      return !q || (d.name + " " + (d.citedBy || []).map(function (c) { return c.title; }).join(" "))
+        .toLowerCase().indexOf(q) >= 0;
+    });
+    if (!docs.length) {
+      return '<p class="note">No documents yet. Drop PDFs, images or spreadsheets into the ' +
+             "<code>docs/</code> folder and they appear here.</p>";
+    }
+    return '<h2 class="month">All documents</h2><div class="attachments">' +
+      docs.map(function (d) { return fileHTML(d, true); }).join("") + "</div>";
+  }
+
+  function entryView(e) {
+    var meta = [];
+    if (e.authors && e.authors.length) meta.push("<b>" + esc(e.authors.join(", ")) + "</b>");
+    if (e.attendees && e.attendees.length) meta.push("Present: " + esc(e.attendees.join(", ")));
+    if (e.tags && e.tags.length) meta.push(e.tags.map(function (t) { return "#" + esc(t); }).join(" "));
+
+    var body = DOMPurify.sanitize(marked.parse(e.body || "", { gfm: true, breaks: false }));
+    var atts = (e.attachments || []).length
+      ? '<div class="attachments"><h3>Attachments</h3>' +
+        e.attachments.map(function (a) { return fileHTML(a, false); }).join("") + "</div>"
+      : "";
+
+    return '<a class="back no-print" href="#/' + (e.kind === "minutes" ? "minutes" : "log") + '">← Back to ' +
+        (e.kind === "minutes" ? "meeting minutes" : "dev logs") + "</a>" +
+      "<article>" +
+        '<div class="article__head">' +
+          '<span class="badge badge--' + esc(e.kind) + '">' + (e.kind === "minutes" ? "Meeting Minutes" : "Dev Log") + "</span> " +
+          '<span class="date">' + esc(fmtDate(e.date)) + (e.updated ? " · updated " + esc(fmtDate(e.updated)) : "") + "</span>" +
+          "<h1>" + esc(e.title) + "</h1>" +
+          (meta.length ? '<p class="byline">' + meta.join(" &nbsp;·&nbsp; ") + "</p>" : "") +
+        "</div>" +
+        '<div class="prose">' + body + "</div>" +
+        atts +
+      "</article>";
+  }
+
+  function emptyNote() {
+    if (state.query || state.tag) return '<p class="note">Nothing matches that filter.</p>';
+    return '<p class="note">No entries yet. Add a Markdown file to <code>logs/</code> or ' +
+           "<code>minutes/</code> and it shows up here.</p>";
+  }
+
+  /* ── Render ─────────────────────────────────────────────────────── */
+  function render() {
+    el("tabs").innerHTML = tabsHTML();
+    el("toolbar").hidden = false;
+
+    var tagbar = el("tagbar");
+    tagbar.innerHTML = tagbarHTML();
+    tagbar.hidden = !tagbar.innerHTML;
+
+    var view = el("view");
+    if (state.entry) {
+      var found = data.entries.filter(function (e) { return e.id === state.entry; })[0];
+      view.innerHTML = found
+        ? entryView(found)
+        : '<p class="note">That entry was not found. <a href="#/">Back to all entries</a>.</p>';
+      // External links and file links open in a new tab.
+      view.querySelectorAll(".prose a[href]").forEach(function (a) {
+        var href = a.getAttribute("href") || "";
+        if (href.charAt(0) === "#") return;
+        a.target = "_blank"; a.rel = "noopener";
+      });
+      window.scrollTo(0, 0);
+    } else {
+      view.innerHTML = state.tab === "documents" ? documentsView() : listView();
+    }
+
+    if (data.generated) {
+      el("generated").textContent = "Last updated " + fmtDate(data.generated) +
+        " · " + data.entries.length + (data.entries.length === 1 ? " entry" : " entries") +
+        " · " + data.documents.length + (data.documents.length === 1 ? " document" : " documents");
+    }
+  }
+
+  /* ── Events ─────────────────────────────────────────────────────── */
+  el("tabs").addEventListener("click", function (ev) {
+    var btn = ev.target.closest("[data-tab]");
+    if (btn) { state.tag = null; location.hash = "#/" + btn.dataset.tab; }
+  });
+  el("tagbar").addEventListener("click", function (ev) {
+    var btn = ev.target.closest("[data-tag]");
+    if (!btn) return;
+    state.tag = state.tag === btn.dataset.tag ? null : btn.dataset.tag;
+    render();
+  });
+  el("search").addEventListener("input", function (ev) {
+    state.query = ev.target.value;
+    if (state.entry) { location.hash = "#/"; return; }
+    render();
+  });
+  window.addEventListener("hashchange", function () { readHash(); render(); });
+
+  /* ── Boot ───────────────────────────────────────────────────────── */
+  renderHead();
+  readHash();
+  fetch("content/index.json", { cache: "no-cache" })
+    .then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
+    .then(function (json) { data = json; render(); })
+    .catch(function (err) {
+      el("view").innerHTML = '<p class="note"><strong>Could not load the entry index.</strong><br>' +
+        "Run <code>python3 scripts/build_index.py</code> and commit " +
+        "<code>content/index.json</code>.<br><br>" +
+        "If you are opening this file directly from disk, use a local server instead: " +
+        "<code>python3 -m http.server</code><br><small>" + esc(err.message) + "</small></p>";
+    });
+})();
+</script>
+</body>
+</html>
