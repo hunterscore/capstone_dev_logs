@@ -1,11 +1,31 @@
 {
- "generated": "2026-09-19T19:55:29Z",
+ "generated": "2026-09-22T19:03:29Z",
  "counts": {
   "log": 0,
   "minutes": 0,
-  "idea": 0,
+  "idea": 1,
   "documents": 0
  },
- "entries": [],
+ "entries": [
+  {
+   "id": "ideas/2026-09-21-multispectral-sar-goggles",
+   "kind": "idea",
+   "title": "Multispectral Search and Rescue Snow Goggles",
+   "date": "2026-09-21",
+   "updated": null,
+   "authors": [
+    "Justin"
+   ],
+   "tags": [
+    "outdoors"
+   ],
+   "attendees": [],
+   "status": "shortlisted",
+   "summary": "",
+   "source": "ideas/2026-09-21-multispectral-sar-goggles.md",
+   "attachments": [],
+   "body": "# Multispectral Search and Rescue Snow Goggles\n\n## Problem\nSearch and resuce (SAR) workers in harsh environments (i.e. blizzards, snow storms, avalanches) have limited visibility when responding to SOS reports. \n\n## Proposed solution\nDevelop a pair of multispectral (i.e. IR, Thermal) goggles which can automatically determine which specturm gives the greatest visibility/contrast. Additionally, goggles can also have HUD which displays location to nearest search party member to assist in search efforts. \n\n## Why it's worth doing\nSince SAR workers will already be wearing snow goggles in extreme environments, a multispectral pair of goggles could enhance successful SAR efforts by giving SAR workers enhanced visibility, especially post-avalanche or during heavy snowstorms for example. \n\n## Concerns and risks\n- Overall package would be too bulky/heavy to be practical\n- Refresh rate might not be fast enough and may cause dizzines or motion sickness\n- Battery life must last long enough to be useful\n- Display resolution must be high enough to allow for small/far away targets to be discernable from wildlife\n\n## Decision notes\nN/A"
+  }
+ ],
  "documents": []
 }
