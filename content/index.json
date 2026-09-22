@@ -1,12 +1,34 @@
 {
- "generated": "2026-09-22T20:34:14Z",
+ "generated": "2026-09-22T20:42:02Z",
  "counts": {
   "log": 0,
   "minutes": 0,
-  "idea": 2,
+  "idea": 3,
   "documents": 0
  },
  "entries": [
+  {
+   "id": "ideas/MicroAlchemy",
+   "kind": "idea",
+   "title": "MAL-02: Metal Deposition Semiconductor Process Tool",
+   "date": "2026-09-22",
+   "updated": null,
+   "authors": [
+    "Hunter",
+    "Justin",
+    "Khushmeet",
+    "Nathan"
+   ],
+   "tags": [
+    "outdoors"
+   ],
+   "attendees": [],
+   "status": "considering",
+   "summary": "",
+   "source": "ideas/MicroAlchemy.md",
+   "attachments": [],
+   "body": "# Idea name MAL-02: Metal Deposition Semiconductor Process Tool\n\n## Problem\n[MicroAlchemy](https://uwaterloo.ca/centre-for-work-integrated-learning/catalogs/capstone-projects/mal-02)"
+  },
   {
    "id": "ideas/AR_snowboard_goggles",
    "kind": "idea",
