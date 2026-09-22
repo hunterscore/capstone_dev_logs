@@ -15,26 +15,32 @@ Snowboarders and skiiers use apps such as Slopes and Strava to track their stats
 3. need to take off gloves and check phone to use apps
 
 ## Proposed solution
-
-## Why it's worth doing
-
-## Concerns and risks
+Create a goggle attachment that creates a display of speeds and location arrows. The locational arrows point to people in your party and/or mountain structures (chalet, lifts).
 
 ## Decision notes
+N/A
 
 ## Objective
-- Display current speed, heading+altitude and direction to nearest friend
-- Detachable/ useable for any goggles
-- <$250
-- light weight <500g
-## Constraint
-- water resistant
-- Must operate bellow 0
-- >4 hours continuous use
-- must fit within helmet & goggle size
-## Criterion
-- mass
-- battery life
-- 
+- Display current speed, heading, altitude and direction to nearest friend
+- The attachment should be less than $250
+- light weight < 500g
+- Device should record video footage
+- Device should non-invasively attaches to most helmet/goggles
+- Device should be water resistant
 
+## Constraints
+- Device must operate in sub-zero temperatures
+- Device must meet IP44 for snow/water resistance
+- Device must not require permanent modifications of goggles or helmet
+- Battery must last at least 4 hours
+- The refresh rate must be at least 1Hz 
+- Device must be usable with winter gloves
 
+## Criteria
+- Mass
+- Volume/dimensions
+- Water/particle resistance
+- Battery life
+- Refresh rate
+- Cost
+- Operating temperature
