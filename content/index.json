@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-22T19:07:27Z",
+ "generated": "2026-09-22T19:54:15Z",
  "counts": {
   "log": 0,
   "minutes": 0,
@@ -14,7 +14,8 @@
    "date": "2026-09-21",
    "updated": "2026-09-22",
    "authors": [
-    "Justin"
+    "Justin",
+    "Khushmeet"
    ],
    "tags": [
     "outdoors"
@@ -24,7 +25,7 @@
    "summary": "",
    "source": "ideas/2026-09-21-multispectral-sar-goggles.md",
    "attachments": [],
-   "body": "# Multispectral Search and Rescue Snow Goggles\n\n## Problem\nSearch and resuce (SAR) workers in harsh environments (i.e. blizzards, snow storms, avalanches) have limited visibility when responding to SOS reports. \n\n## Proposed solution\nDevelop a pair of multispectral (i.e. IR, Thermal) goggles which can automatically determine which specturm gives the greatest visibility/contrast. Additionally, goggles can also have HUD which displays location to nearest search party member to assist in search efforts. \n\n## Why it's worth doing\nSince SAR workers will already be wearing snow goggles in extreme environments, a multispectral pair of goggles could enhance successful SAR efforts by giving SAR workers enhanced visibility, especially post-avalanche or during heavy snowstorms for example. \n\n## Concerns and risks\n- Overall package would be too bulky/heavy to be practical\n- Refresh rate might not be fast enough and may cause dizzines or motion sickness\n- Battery life must last long enough to be useful\n- Display resolution must be high enough to allow for small/far away targets to be discernable from wildlife\n\n## Decision notes\nN/A"
+   "body": "# Multispectral Search and Rescue Snow Goggles\n\n## Problem\nSearch and resuce (SAR) workers in harsh environments (i.e. blizzards, snow storms, avalanches) have limited visibility when responding to SOS reports. \n\n## Proposed solution\nDevelop a pair of multispectral (i.e. IR, Thermal) goggles which can automatically determine which specturm gives the greatest visibility/contrast. Additionally, goggles can also have HUD which displays location to nearest search party member to assist in search efforts. \n\n## Why it's worth doing\nSince SAR workers will already be wearing snow goggles in extreme environments, a multispectral pair of goggles could enhance successful SAR efforts by giving SAR workers enhanced visibility, especially post-avalanche or during heavy snowstorms for example. \n\n## Concerns and risks\n- Overall package would be too bulky/heavy to be practical\n- Refresh rate might not be fast enough and may cause dizzines or motion sickness\n- Battery life must last long enough to be useful\n- Display resolution must be high enough to allow for small/far away targets to be discernable from wildlife\n\n## Objectives\n- Weight should be less 500g\n- Battery life should be at least 8 hours \n- Spectral band switching should occur automatically during contrast change\n- Refresh rate should be at least 72Hz to mitigate nausea\n- Should be able to identify a person within a 3 metre range\n- The device should be able to work in cold climates\n\n## Constraints\n- Device must operate in sub-zero temperatures\n- Device must meet IP44 for snow/water resistance\n- Device must not extend further than 10cm beyond a regular goggle profile\n- Battery must last 6 hours with continuous use\n- The refresh rate must be at least 60Hz \n- Device must be usable with winter gloves\n\n## Criteria\n- Mass\n- Volume/dimensions\n- Water/particle resistance\n- Battery life\n- Refresh rate\n- Visible range\n- Cost\n- Operating temperature\n- Spectral switching time\n- Resolution\n\n## Decision Notes\n- N/A"
   }
  ],
  "documents": []
