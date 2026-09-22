@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-22T20:14:50Z",
+ "generated": "2026-09-22T20:34:14Z",
  "counts": {
   "log": 0,
   "minutes": 0,
@@ -24,7 +24,7 @@
    "summary": "",
    "source": "ideas/AR_snowboard_goggles.md",
    "attachments": [],
-   "body": "# Idea name AR Snowboard Goggles\n\n## Problem\nSnowboarders and skiiers use apps such as Slopes and Strava to track their stats on runs and to locate their friends on other parts of the mountain. However using your phone for these apps poses several problems while on the mountain:\n1. drains phone battery quickly\n2. unable to check speed while on run\n3. need to take off gloves and check phone to use apps\n\n## Proposed solution\n\n## Why it's worth doing\n\n## Concerns and risks\n\n## Decision notes\n\n## Objective\n- Display current speed, heading+altitude and direction to nearest friend\n- Detachable/ useable for any goggles\n- <$250\n- light weight <500g\n## Constraint\n- water resistant\n- Must operate bellow 0\n- >4 hours continuous use\n- must fit within helmet & goggle size\n## Criterion\n- mass\n- battery life\n-"
+   "body": "# Idea name AR Snowboard Goggles\n\n## Problem\nSnowboarders and skiiers use apps such as Slopes and Strava to track their stats on runs and to locate their friends on other parts of the mountain. However using your phone for these apps poses several problems while on the mountain:\n1. drains phone battery quickly\n2. unable to check speed while on run\n3. need to take off gloves and check phone to use apps\n\n## Proposed solution\nCreate a goggle attachment that creates a display of speeds and location arrows. The locational arrows point to people in your party and/or mountain structures (chalet, lifts).\n\n## Decision notes\nN/A\n\n## Objective\n- Display current speed, heading, altitude and direction to nearest friend\n- The attachment should be less than $250\n- light weight < 500g\n- Device should record video footage\n- Device should non-invasively attaches to most helmet/goggles\n- Device should be water resistant\n\n## Constraints\n- Device must operate in sub-zero temperatures\n- Device must meet IP44 for snow/water resistance\n- Device must not require permanent modifications of goggles or helmet\n- Battery must last at least 4 hours\n- The refresh rate must be at least 1Hz \n- Device must be usable with winter gloves\n\n## Criteria\n- Mass\n- Volume/dimensions\n- Water/particle resistance\n- Battery life\n- Refresh rate\n- Cost\n- Operating temperature"
   },
   {
    "id": "ideas/2026-09-21-multispectral-sar-goggles",
