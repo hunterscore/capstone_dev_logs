@@ -3,7 +3,7 @@ title: Monorail PCB
 date: 2026-09-30
 author: [Justin]
 status: shortlisted
-tags: [printing]
+tags: [placing]
 ---
 
 # Idea name Monorail PCB

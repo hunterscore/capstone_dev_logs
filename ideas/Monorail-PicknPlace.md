@@ -3,7 +3,7 @@ title: Monorail Pick and Place
 date: 2026-09-30
 author: [Hunter]
 status: shortlisted
-tags: [printing]
+tags: [placing]
 ---
 
 # Idea name Monorail Pick and Place
