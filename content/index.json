@@ -1,12 +1,31 @@
 {
- "generated": "2026-09-30T00:39:14Z",
+ "generated": "2026-09-30T17:54:19Z",
  "counts": {
   "log": 0,
   "minutes": 0,
-  "idea": 3,
+  "idea": 4,
   "documents": 0
  },
  "entries": [
+  {
+   "id": "ideas/Monorail-Tripteron",
+   "kind": "idea",
+   "title": "Monorail Tripteron",
+   "date": "2026-09-30",
+   "updated": null,
+   "authors": [
+    "Nathan"
+   ],
+   "tags": [
+    "printing"
+   ],
+   "attendees": [],
+   "status": "shortlisted",
+   "summary": "",
+   "source": "ideas/Monorail-Tripteron.md",
+   "attachments": [],
+   "body": "# Idea name Monorail Tripteron\n\n## Problem\n3D Printers are limited in printing long parts such as car pieces. \n\n## Proposed solution\nCreate a monorail tripteron system that spans a long y axis.\n\n## Decision notes\nN/A\n\n## Objective\n- Print parts longer than a desktop printer\n- Accuracy on the y-axis\n- Affordable\n- Easy to calibrate/set up\n- Device should be able to fit on a workbench\n\n## Constraints\n- Device must use a linear rail\n- Device must run on wall power\n- Device must not deflect over 1mm\n- Device must have an e-stop\n\n## Criteria\n- Volume/dimensions\n- Accuracy\n- Print speed\n- Calibration time\n- Cost"
+  },
   {
    "id": "ideas/MicroAlchemy",
    "kind": "idea",
