@@ -1,5 +1,5 @@
 ---
-title: Group formation
+title: Problem Iteration
 date:
 type: minutes
 attendees: []
@@ -13,6 +13,14 @@ draft: true
 **Time and place.**
 
 ## Discussion
+- problem statement: safety risks/discomfort while using pre-existing apps on the phone for winter sports--drains battery.
+- potential solutions
+- watch app
+- sound notifications
+- camera on the slope (external) with object tracking
+- goggle HUD
+- smart sleeve
+- on top of the board
 
 ## Decisions
 
