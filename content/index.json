@@ -1,9 +1,9 @@
 {
- "generated": "2026-09-30T17:57:45Z",
+ "generated": "2026-09-30T18:13:08Z",
  "counts": {
   "log": 0,
   "minutes": 0,
-  "idea": 4,
+  "idea": 5,
   "documents": 0
  },
  "entries": [
@@ -25,6 +25,25 @@
    "source": "ideas/Monorail-Tripteron.md",
    "attachments": [],
    "body": "# Idea name Monorail Tripteron\n\n## Problem\n3D Printers are limited in printing long parts such as car pieces. \n\n## Proposed solution\nCreate a monorail tripteron system that spans a long y axis.\n\n## Decision notes\nN/A\n\n## Objective\n- Print parts longer than a desktop printer\n- Accuracy on the y-axis\n- Affordable\n- Easy to calibrate/set up\n- Device should be able to fit on a workbench\n\n## Constraints\n- Device must use a linear rail\n- Device must run on wall power\n- Device must not deflect over 1mm\n- Device must have an e-stop\n\n## Criteria\n- Volume/dimensions\n- Accuracy\n- Print speed\n- Calibration time\n- Cost"
+  },
+  {
+   "id": "ideas/Monorail-PicknPlace",
+   "kind": "idea",
+   "title": "Monorail Pick and Place",
+   "date": "2026-09-30",
+   "updated": null,
+   "authors": [
+    "Hunter"
+   ],
+   "tags": [
+    "printing"
+   ],
+   "attendees": [],
+   "status": "shortlisted",
+   "summary": "",
+   "source": "ideas/Monorail-PicknPlace.md",
+   "attachments": [],
+   "body": "# Idea name Monorail Pick and Place\n\n## Problem\nPick and place systems for labs/manufacturing have a large footprint and cannot be contained on the workbench.\n\n## Proposed solution\nCreate a monorail tripteron system that spans a long y axis.\n\n## Decision notes\nN/A\n\n## Objective\n- Pick and place parts for contained workspaces (i.e. hoods, enclosures)\n- Accuracy on the xy-axis\n- Affordable\n- Easy to calibrate/set up\n- Device should be able to fit on a workbench\n\n## Constraints\n- Device must use a linear rail\n- Device must run on wall power\n- Device must not deflect over 1mm\n- Device must have an e-stop\n\n## Criteria\n- Volume/dimensions\n- Accuracy\n- Pick and place speed\n- Calibration time\n- Cost"
   },
   {
    "id": "ideas/MicroAlchemy",
