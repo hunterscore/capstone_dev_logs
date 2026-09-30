@@ -10,6 +10,7 @@ tags: [printing]
 
 ## Problem
 Pick and place systems for labs/manufacturing have a large footprint and cannot be contained on the workbench.
+Automating work in chemical labs. Need movement across a long workbench. With modular design to replicate on multiple workbenches.
 
 ## Proposed solution
 Create a monorail tripteron system that spans a long y axis.
