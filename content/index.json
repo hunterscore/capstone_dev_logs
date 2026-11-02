@@ -1,12 +1,34 @@
 {
- "generated": "2026-09-30T18:28:12Z",
+ "generated": "2026-11-02T21:31:09Z",
  "counts": {
   "log": 0,
-  "minutes": 0,
+  "minutes": 1,
   "idea": 6,
   "documents": 0
  },
  "entries": [
+  {
+   "id": "minutes/2026-10-15",
+   "kind": "minutes",
+   "title": "SHARE — PDP",
+   "date": "2026-10-15",
+   "updated": "2026-11-02",
+   "authors": [],
+   "tags": [
+    "team"
+   ],
+   "attendees": [
+    "Hunter Adams",
+    "Nathan Ellis",
+    "Khushmeet Kaur",
+    "Justin Zhang"
+   ],
+   "status": null,
+   "summary": "",
+   "source": "minutes/2026-10-15.md",
+   "attachments": [],
+   "body": "# Idea finalization and PDP preparation\n\n## Discussion\n\n### Needs assessment\n\n- Completed a needs assessment for the concept.\n- Identified the need for better equipment utilization in self-driving laboratories.\n- Drafted the problem statement, objectives, criteria, and constraints.\n\n### Solution concepts\n\n- Outlined our proposal for a bench-mounted sample-handling system.\n- Developed several distinct solution morphologies.\n\n### Concept selection\n\n- Defined the design criteria and assigned each a weight.\n- Used the weights to build a decision matrix and scored each design in it.\n- The monorail tripteron scored highest.\n\n### Timeline\n\n- Set a development timeline.\n\n## Decisions\n\n- The monorail tripteron is our selected design, because it scored highest in the weighted decision matrix."
+  },
   {
    "id": "ideas/Monorail-Tripteron",
    "kind": "idea",
