@@ -13,189 +13,109 @@ tags: [team]
 ## Discussion
 
 What was discussed.
+# 3-PRRR Sample Handler: System Flowcharts
 
-┌─────────────────────────────────────────────────────────┐
-│              1. Spatial Target Input                    │
-│   • Desired End-Effector Location: Target (X, Y, Z)     │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│        2. Kinematic Solver (Raspberry Pi / Host)        │
-│   • Closed-Form 3-PRRR Inverse Kinematics (IK)          │
-│   • Algebraic Transformation: (X, Y, Z) ➔ (d1, d2, d3)  │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│       3. Motion Controller (32-Bit MCU Firmware)        │
-│   • Displacement to Step Conversion: STEPS_PER_MM       │
-│   • Pulse Generation & Trapezoidal Velocity Ramping     │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│          4. Actuation & Primary Drive Train             │
-│   • 3x Stepper Motors + TMC2209 Silent Drivers          │
-│   • Continuous GT2 Timing Belt Drive Loop               │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│     5. Single-Rail Mechanical Transmission (3-PRRR)     │
-│   • 3x Collinear Carriages on Central Extrusion Track   │
-│   • Passive Linkage Arms with Free Revolute Joints      │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│              6. End-Effector Spatial Output             │
-│   • Realized 3D Coordinate (X, Y, Z)                    │
-│   • Electromechanical Parallel-Jaw Sample Gripper       │
-└─────────────────────────────────────────────────────────┘
+This document describes the full signal and control flow for the single-rail 3-PRRR parallel manipulator and its sample gripper.
 
-┌─────────────────────────────────────────────────────────┐
-│           1. Pre-Grip & Object Detection                │
-│   • ToF IR Sensor (VL53L1X) checks vial presence        │
-│   • Pi commands gripper lead-screw motor to start closing│
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│        2. Active Clamping & Lead-Screw Drive            │
-│   • Micro stepper motor drives parallel jaws inward     │
-│   • Strain gauge load cell flexes under contact force   │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│          3. Strain Gauge Signal Conditioning             │
-│   • Wheatstone bridge outputs differential mV signal    │
-│   • HX711 24-bit ADC amplifies & digitizes at 80 Hz    │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-                 ┌───────────────────────┐
-                 │  4. Force Comparison  │
-                 │  Is F_meas >= F_target?│
-                 └───────────┬───────────┘
-                             │
-               ┌─────────────┴─────────────┐
-            NO │                           │ YES
-               ▼                           ▼
-┌────────────────────────────┐  ┌─────────────────────────┐
-│ Continue Motor Inward Drive│  │ Halt Motor Immediately  │
-└──────────────┬─────────────┘  │ Engage Holding Torque   │
-               │                └────────────┬────────────┘
-               └───────◄─────────────────────┘
-                                           │
-                                           ▼
-┌─────────────────────────────────────────────────────────┐
-│         5. In-Transit Sample Drop Protection            │
-│   • Rail transit begins along Y-axis track               │
-│   • Continuous background strain gauge force polling    │
-│   • If F_meas drops < Threshold ➔ Trigger Drop Alert    │
-└────────────────────────────┬────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────┐
-│               6. Sample Release Phase                   │
-│   • Target destination reached                          │
-│   • Lead-screw motor reverses to retract jaws           │
-└─────────────────────────────────────────────────────────┘
+---
 
-All of the control loops:
+## 1. Overall System Pipeline
 
- ┌─────────────────────────────────────────────────────────────┐
- │                  1. Initial Grip Command                    │
- │  • Target force threshold set (e.g., F_target = 2.0 N)      │
- │  • Pi commands micro lead-screw stepper motor to close jaws │
- └──────────────────────────────┬──────────────────────────────┘
-                                │
-                                ▼
- ┌─────────────────────────────────────────────────────────────┐
- │                2. Continuous Signal Sampling                │
- │  • Lead-screw closes parallel jaws on sample                │
- │  • HX711 24-bit ADC samples load cell force at 80 Hz        │
- └──────────────────────────────┬──────────────────────────────┘
-                                │
-                                ▼
-                   ┌───────────────────────────┐
-                   │   3. Threshold Check      │
-                   │   Is F_meas >= F_target?  │
-                   └────────────┬──────────────┘
-                                │
-                 ┌──────────────┴──────────────┐
-              NO │                             │ YES
-                 ▼                             ▼
-┌──────────────────────────────┐ ┌─────────────────────────────┐
-│  Continue Motor Inward Drive │ │  Halt Motor Drive Instantly │
-└───────────────┬──────────────┘ │  Engage Holding Current     │
-                │                └──────────────┬──────────────┘
-                └───────◄───────────────────────┘
-                                                │
-                                                ▼
- ┌─────────────────────────────────────────────────────────────┐
- │             4. In-Transit Sample Drop Monitor               │
- │  • Rail moves sample along Y-axis track                     │
- │  • Background check: If F_meas drops < 0.2 N ➔ Alert & Halt │
- └─────────────────────────────────────────────────────────────┘
+From a target coordinate to the realized end-effector position.
 
-  ┌─────────────────────────────────────────────────────────────┐
- │                 1. Real-Time Distance Read                  │
- │  • VL53L1X ToF IR sensor measures vertical height above     │
- │    benchtop: Z_measured                                     │
- └──────────────────────────────┬──────────────────────────────┘
-                                │
-                                ▼
- ┌─────────────────────────────────────────────────────────────┐
- │                  2. Error Calculation                       │
- │  • Delta_Z = Z_target - Z_measured                          │
- └──────────────────────────────┬──────────────────────────────┘
-                                │
-                                ▼
-                   ┌───────────────────────────┐
-                   │   3. Tolerance Check      │
-                   │   Is |Delta_Z| > 0.2 mm?  │
-                   └────────────┬──────────────┘
-                                │
-                 ┌──────────────┴──────────────┐
-              NO │                             │ YES
-                 ▼                             ▼
-┌──────────────────────────────┐ ┌─────────────────────────────┐
-│ Maintain Current Trajectory  │ │ Recalculate 3-PRRR IK       │
-│ No adjustment needed         │ │ Adjust d1, d2, d3 Carriages │
-└──────────────────────────────┘ └─────────────────────────────┘
+```mermaid
+flowchart TD
+    A["<b>1. Spatial Target Input</b><br/>Desired end-effector location<br/>Target (X, Y, Z)"]
+    B["<b>2. Kinematic Solver</b> (Raspberry Pi / Host)<br/>Closed-form 3-PRRR inverse kinematics<br/>(X, Y, Z) → (d1, d2, d3)"]
+    C["<b>3. Motion Controller</b> (32-bit MCU firmware)<br/>Displacement to steps: STEPS_PER_MM<br/>Pulse generation + trapezoidal velocity ramping"]
+    D["<b>4. Actuation & Primary Drive Train</b><br/>3x stepper motors + TMC2209 silent drivers<br/>Continuous GT2 timing belt drive loop"]
+    E["<b>5. Single-Rail Mechanical Transmission</b> (3-PRRR)<br/>3x collinear carriages on central extrusion track<br/>Passive linkage arms with free revolute joints"]
+    F["<b>6. End-Effector Spatial Output</b><br/>Realized 3D coordinate (X, Y, Z)<br/>Electromechanical parallel-jaw sample gripper"]
 
- ┌─────────────────────────────────────────────────────────────┐
- │               1. Spatial Coordinate Target                  │
- │  • Input desired target coordinate: (X, Y, Z) in mm         │
- └──────────────────────────────┬──────────────────────────────┘
-                                │
-                                ▼
- ┌─────────────────────────────────────────────────────────────┐
- │            2. Closed-Form Kinematic Solver                  │
- │  • Raspberry Pi computes carriage positions (d1, d2, d3)    │
- │    using linear 3-PRRR algebraic equations [4]             │
- └──────────────────────────────┬──────────────────────────────┘
-                                │
-                                ▼
- ┌─────────────────────────────────────────────────────────────┐
- │               3. Pulse Generation & Motion                  │
- │  • Motion controller converts (d1, d2, d3) to step counts   │
- │  • TMC2209 drivers execute trapezoidal velocity profile     │
- └──────────────────────────────┬──────────────────────────────┘
-                                │
-                                ▼
- ┌─────────────────────────────────────────────────────────────┐
- │            4. StallGuard Safety Back-EMF Loop               │
- │  • TMC2209 driver continuously monitors motor back-EMF      │
- │  • Spikes in back-EMF ➔ Physical obstacle or jam detected   │
- │  • Triggers emergency interrupt ➔ Disables motor torque    │
- └─────────────────────────────────────────────────────────────┘
+    A --> B --> C --> D --> E --> F
+```
 
+---
 
+## 2. Gripper Operation Sequence
 
+Full lifecycle of a pick, transit and release.
+
+```mermaid
+flowchart TD
+    A["<b>1. Pre-Grip & Object Detection</b><br/>ToF IR sensor (VL53L1X) checks vial presence<br/>Pi commands lead-screw motor to start closing"]
+    B["<b>2. Active Clamping & Lead-Screw Drive</b><br/>Micro stepper drives parallel jaws inward<br/>Strain gauge load cell flexes under contact force"]
+    C["<b>3. Strain Gauge Signal Conditioning</b><br/>Wheatstone bridge outputs differential mV signal<br/>HX711 24-bit ADC amplifies and digitizes at 80 Hz"]
+    D{"<b>4. Force Comparison</b><br/>Is F_meas ≥ F_target?"}
+    E["Continue motor inward drive"]
+    F["Halt motor immediately<br/>Engage holding torque"]
+    G["<b>5. In-Transit Sample Drop Protection</b><br/>Rail transit begins along Y-axis track<br/>Continuous background strain gauge polling<br/>If F_meas drops below threshold → Drop Alert"]
+    H["<b>6. Sample Release Phase</b><br/>Target destination reached<br/>Lead-screw motor reverses to retract jaws"]
+
+    A --> B --> C --> D
+    D -- NO --> E --> C
+    D -- YES --> F --> G --> H
+```
+
+---
+
+## 3. Gripper Force Control Loop
+
+The closed loop that clamps the sample at a fixed force and monitors for drops.
+
+```mermaid
+flowchart TD
+    A["<b>1. Initial Grip Command</b><br/>Target force threshold set (e.g., F_target = 2.0 N)<br/>Pi commands lead-screw stepper to close jaws"]
+    B["<b>2. Continuous Signal Sampling</b><br/>Lead-screw closes parallel jaws on sample<br/>HX711 24-bit ADC samples load cell at 80 Hz"]
+    C{"<b>3. Threshold Check</b><br/>Is F_meas ≥ F_target?"}
+    D["Continue motor inward drive"]
+    E["Halt motor drive instantly<br/>Engage holding current"]
+    F["<b>4. In-Transit Sample Drop Monitor</b><br/>Rail moves sample along Y-axis track<br/>Background check: if F_meas falls below 0.2 N<br/>→ Alert and halt"]
+
+    A --> B --> C
+    C -- NO --> D --> B
+    C -- YES --> E --> F
+```
+
+---
+
+## 4. Z-Height Closed-Loop Correction
+
+Uses the ToF sensor to correct vertical error against the benchtop.
+
+```mermaid
+flowchart TD
+    A["<b>1. Real-Time Distance Read</b><br/>VL53L1X ToF IR sensor measures vertical<br/>height above benchtop: Z_measured"]
+    B["<b>2. Error Calculation</b><br/>ΔZ = Z_target − Z_measured"]
+    C{"<b>3. Tolerance Check</b><br/>Does the magnitude of ΔZ<br/>exceed 0.2 mm?"}
+    D["Maintain current trajectory<br/>No adjustment needed"]
+    E["Recalculate 3-PRRR IK<br/>Adjust d1, d2, d3 carriages"]
+
+    A --> B --> C
+    C -- NO --> D
+    C -- YES --> E
+```
+
+---
+
+## 5. Motion Planning and StallGuard Safety
+
+From target coordinate to motion, with jam detection.
+
+```mermaid
+flowchart TD
+    A["<b>1. Spatial Coordinate Target</b><br/>Input desired target coordinate<br/>(X, Y, Z) in mm"]
+    B["<b>2. Closed-Form Kinematic Solver</b><br/>Raspberry Pi computes carriage positions (d1, d2, d3)<br/>using linear 3-PRRR algebraic equations [4]"]
+    C["<b>3. Pulse Generation & Motion</b><br/>Motion controller converts (d1, d2, d3) to step counts<br/>TMC2209 drivers execute trapezoidal velocity profile"]
+    D["<b>4. StallGuard Safety Back-EMF Loop</b><br/>TMC2209 continuously monitors motor back-EMF"]
+    E{"Back-EMF spike?"}
+    F["Continue motion"]
+    G["Physical obstacle or jam detected<br/>Emergency interrupt → disable motor torque"]
+
+    A --> B --> C --> D --> E
+    E -- NO --> F
+    E -- YES --> G
+```
 ## Decisions
 
 Main controller: https://www.pishop.ca/product/raspberry-pi-4-model-b-4gb/
