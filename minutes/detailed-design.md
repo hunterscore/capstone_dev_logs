@@ -1,6 +1,6 @@
 ---
 title: Kinematics and End Effector
-date: 2026-11-2
+date: 2026-11-02
 type: minutes
 attendees: [Name, Name, Name]
 tags: [team]
@@ -12,14 +12,9 @@ tags: [team]
 
 ## Discussion
 
-What was discussed.
-# 3-PRRR Sample Handler: System Flowcharts
+This section covers the full signal and control flow for the single-rail 3-PRRR parallel manipulator and its sample gripper.
 
-This document describes the full signal and control flow for the single-rail 3-PRRR parallel manipulator and its sample gripper.
-
----
-
-## 1. Overall System Pipeline
+### 1. Overall System Pipeline
 
 From a target coordinate to the realized end-effector position.
 
@@ -35,9 +30,7 @@ flowchart TD
     A --> B --> C --> D --> E --> F
 ```
 
----
-
-## 2. Gripper Operation Sequence
+### 2. Gripper Operation Sequence
 
 Full lifecycle of a pick, transit and release.
 
@@ -57,9 +50,7 @@ flowchart TD
     D -- YES --> F --> G --> H
 ```
 
----
-
-## 3. Gripper Force Control Loop
+### 3. Gripper Force Control Loop
 
 The closed loop that clamps the sample at a fixed force and monitors for drops.
 
@@ -77,9 +68,7 @@ flowchart TD
     C -- YES --> E --> F
 ```
 
----
-
-## 4. Z-Height Closed-Loop Correction
+### 4. Z-Height Closed-Loop Correction
 
 Uses the ToF sensor to correct vertical error against the benchtop.
 
@@ -96,9 +85,7 @@ flowchart TD
     C -- YES --> E
 ```
 
----
-
-## 5. Motion Planning and StallGuard Safety
+### 5. Motion Planning and StallGuard Safety
 
 From target coordinate to motion, with jam detection.
 
@@ -116,11 +103,12 @@ flowchart TD
     E -- NO --> F
     E -- YES --> G
 ```
+
 ## Decisions
 
-Main controller: https://www.pishop.ca/product/raspberry-pi-4-model-b-4gb/
-Low level communication: STM32 Nucleo connected with drivers
+- **Main controller:** [Raspberry Pi 4 Model B (4 GB)](https://www.pishop.ca/product/raspberry-pi-4-model-b-4gb/)
+- **Low-level communication:** STM32 Nucleo connected to the stepper drivers
 
 ## Action items
 
-- [ ] Kinematic Solver to target step counts — Khushmeet, 2026-11-7
+- [ ] Kinematic Solver to target step counts — Khushmeet, 2026-11-07
